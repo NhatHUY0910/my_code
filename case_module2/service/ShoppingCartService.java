@@ -1,8 +1,8 @@
 package case_module2.service;
 
 import case_module2.controller.LoginController;
-import case_module2.dto.ProductDTO;
-import case_module2.dto.ShoppingCartDTO;
+import case_module2.read_write_file.ProductDTO;
+import case_module2.read_write_file.ShoppingCartDTO;
 import case_module2.model.product.Product;
 import case_module2.model.shopping_cart.ShoppingCart;
 
@@ -18,7 +18,7 @@ public class ShoppingCartService {
         List<ShoppingCart> shoppingCartList = ShoppingCartDTO.readFile();
         List<Product> productList = ProductDTO.readFile();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Nhập tên sản phẩm:");
+        System.out.println("Nhập tên sản phẩm bạn muốn thêm vào giỏ hàng:");
         String name = scanner.nextLine();
 
         boolean isExist = false;

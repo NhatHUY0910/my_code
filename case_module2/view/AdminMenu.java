@@ -1,4 +1,4 @@
-package case_module2.view_display;
+package case_module2.view;
 
 import case_module2.controller.AdminController;
 

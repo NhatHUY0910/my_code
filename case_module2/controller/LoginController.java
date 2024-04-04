@@ -1,10 +1,10 @@
 package case_module2.controller;
 
-import case_module2.dto.AccountDTO;
+import case_module2.read_write_file.AccountDTO;
 import case_module2.model.user_account.AdminAccount;
 import case_module2.model.user_account.CustomerAccount;
-import case_module2.view_display.AdminMenu;
-import case_module2.view_display.CustomerMenu;
+import case_module2.view.AdminMenu;
+import case_module2.view.CustomerMenu;
 
 import java.util.List;
 import java.util.Scanner;
@@ -39,13 +39,13 @@ public class LoginController {
                     currentAccount = inputUserName;
                     System.out.println("Đăng nhập thành công!");
                     Thread.sleep(1000);
+                    System.out.println();
 
                     AccountDTO.writeCustomerAccounts(customerAccountList);
                     CustomerMenu.showMenu();
 //                    isLoggedIn = true;
                     break;
                 }
-
 
             if (!isSucceeded && adminAccount != null && adminAccount.getUserName().equals(inputUserName) && adminAccount.getPassWord().equals(inputPassword)) {
 //                isSucceeded = true;

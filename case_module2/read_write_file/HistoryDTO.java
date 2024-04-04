@@ -1,4 +1,4 @@
-package case_module2.dto;
+package case_module2.read_write_file;
 
 import case_module2.model.bill.Bill;
 
@@ -41,7 +41,7 @@ public class HistoryDTO {
 
     public static void writeFile(List<Bill> historyList) {
         try {
-            FileWriter fileWriter = new FileWriter(file);
+            FileWriter fileWriter = new FileWriter(file, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             for (Bill bill : historyList) {

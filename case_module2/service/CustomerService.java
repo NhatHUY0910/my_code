@@ -2,10 +2,10 @@ package case_module2.service;
 
 
 import case_module2.controller.LoginController;
-import case_module2.dto.AccountDTO;
+import case_module2.read_write_file.AccountDTO;
 
-import case_module2.dto.HistoryDTO;
-import case_module2.dto.ShoppingCartDTO;
+import case_module2.read_write_file.HistoryDTO;
+import case_module2.read_write_file.ShoppingCartDTO;
 import case_module2.model.bill.Bill;
 import case_module2.model.shopping_cart.ShoppingCart;
 import case_module2.model.user_account.CustomerAccount;
@@ -17,11 +17,12 @@ import java.util.Scanner;
 
 
 public class CustomerService {
-
     private List<CustomerAccount> customerAccountList;
+    private boolean isBillPrinted;
 
     public CustomerService() {
         customerAccountList = AccountDTO.readCustomerAccount();
+        isBillPrinted = false;
     }
 
     public void addMoney(double amount) {
@@ -38,6 +39,7 @@ public class CustomerService {
                 customerAccount.setWallet(newWallet);
                 AccountDTO.writeCustomerAccounts(customerAccountList);
                 System.out.println("Nạp tiền thành công. Số dư mới: " + newWallet);
+                System.out.println();
                 return;
             }
         }
@@ -45,20 +47,52 @@ public class CustomerService {
     }
 
     public void showBill(Bill bill) {
+        int maxProductNameLength = 30;
+        int maxQuantityLength = 20;
+        int maxPriceLength = 20;
+        int maxTotalLength = 20;
+
+        if (isBillPrinted) {
+            return;
+        }
         List<ShoppingCart> shoppingCartList = ShoppingCartService.getMyCart();
         double total = 0;
 
-        System.out.println("___________________________________________________________________");
-        System.out.printf("|%-36s |%-20s |%-10s |%-10s |%-10s |\n", "Thời Gian", "Tên Sản Phẩm", "Số Lượng", "Giá", "Tổng Tiền");
+        System.out.println("______________________________________________________________________________________________________________");
+        System.out.printf("|%-33s |%-25s |%-15s |%-13s |%-20s |\n", "Thời Gian", "Tên Sản Phẩm", "Số Lượng", "Giá", "Tổng Tiền");
         for (ShoppingCart shoppingCart : shoppingCartList) {
-            System.out.println("|-------------|---------------------|-----------|----------|----------|");
+            System.out.println("|----------------------------------|--------------------------|----------------|--------------|---------------|");
             double itemTotal = shoppingCart.getProductQuantity() * shoppingCart.getProductPrice();
-            System.out.printf("|%-12s |%-20s |%-10d |%-10.2f |%-10.2f |\n", bill.getTimeTransaction(), shoppingCart.getProductName(), shoppingCart.getProductQuantity(), shoppingCart.getProductPrice(), itemTotal);
+
+            String productName = shoppingCart.getProductName();
+            if (productName.length() > maxProductNameLength) {
+                productName = productName.substring(0, maxProductNameLength - 3) + "...";
+            }
+
+            String quantity = String.valueOf(shoppingCart.getProductQuantity());
+            if (quantity.length() > maxQuantityLength) {
+                quantity = quantity.substring(0, maxQuantityLength - 3) + "...";
+            }
+
+            String price = String.valueOf(shoppingCart.getProductPrice());
+            if (price.length() > maxPriceLength) {
+                price = price.substring(0, maxPriceLength - 3) + "...";
+            }
+
+            String itemTotalString = String.valueOf(itemTotal);
+            if (itemTotalString.length() > maxTotalLength) {
+                itemTotalString = itemTotalString.substring(0, maxTotalLength - 3) + "...";
+            }
+
+            System.out.printf("|%-33s |%-25s |%-15s |%-13s |%-20s |\n", bill.getTimeTransaction(), productName, quantity, price, itemTotalString);
             total += itemTotal;
         }
-        System.out.println("|___________________________________________________________________|");
-        System.out.printf("|%-54s |%-10.2f |\n", "Total:", total);
-        System.out.println("|___________________________________________________________________|");
+        System.out.println("|_____________________________________________________________________________________________________________|");
+        System.out.printf("|%-92s |%-20.2f |\n", "Total:", total);
+        System.out.println("|_____________________________________________________________________________________________________________|");
+        System.out.println();
+
+        isBillPrinted = true;
     }
 
     public void buyProduct() {
@@ -86,19 +120,17 @@ public class CustomerService {
 
             switch (choice) {
                 case 1:
-                    double shoppingCartTotal = ShoppingCartService.getTotal();
+                    List<ShoppingCart> myShoppingCartList = ShoppingCartService.getMyCart();
+                    List<Bill> billList = new ArrayList<>();
 
-                    if (shoppingCartTotal < currentAccount.getWallet()) {
-                        LocalDateTime now = LocalDateTime.now();
-                        String currentName = currentAccount.getUserName();
-                        List<ShoppingCart> myShoppingCartList = ShoppingCartService.getMyCart();
-                        List<Bill> billList = new ArrayList<>();
+                    for (ShoppingCart shoppingCart : myShoppingCartList) {
+                        Bill bill = new Bill(LocalDateTime.now(), shoppingCart.getProductName(), shoppingCart.getProductPrice(), shoppingCart.getProductQuantity(), shoppingCart.getCustomerName(), shoppingCart.getTotalPrice());
+                        billList.add(bill);
+                    }
 
-                        for (ShoppingCart cart : myShoppingCartList) {
-                            Bill bill = new Bill(now, cart.getProductName(), cart.getProductPrice(), cart.getProductQuantity(), cart.getCustomerName(), cart.getTotalPrice());
-                            billList.add(bill);
-                        }
+                    double totalCost = new Bill().calculateTotalCost(myShoppingCartList);
 
+                    if (totalCost < currentAccount.getWallet()) {
                         HistoryDTO.writeFile(billList);
 
                         ProductService productService = new ProductService();
@@ -109,19 +141,13 @@ public class CustomerService {
                             showBill(bill);
                         }
 
-                        double newWalletBalance = currentAccount.getWallet() - shoppingCartTotal;
+                        double newWalletBalance = currentAccount.getWallet() - totalCost;
                         currentAccount.setWallet(newWalletBalance);
-                        AccountDTO.writeCustomerAccounts(customerAccountList1);
+                        AccountDTO.writeCustomerAccounts(customerAccountList);
 
                         myShoppingCartList.clear();
                         ShoppingCartDTO.writeFile(myShoppingCartList);
-
-                        double totalCost = calculateTotalCost(billList);
-
-                        for (Bill bill : billList) {
-                            bill.setTotalCost(totalCost);
-                        }
-                    } else {
+                        } else {
                         System.err.println("Số dư trong tài khoản không đủ để thanh toán. Vui lòng nạp thêm tiền");
                     }
                     break;
@@ -131,7 +157,7 @@ public class CustomerService {
                     break;
 
                 default:
-                    System.out.println("Lựa chọn không hợp lệ. Giao dịch bị hủy");
+                    System.out.println("Lựa chọn không hợp lệ! Giao dịch bị hủy");
                     break;
             }
         } else {
@@ -160,8 +186,10 @@ public class CustomerService {
 
         if (currentAccount != null) {
             System.out.println("Số dư tài khoản của bạn là: " + currentAccount.getWallet());
+            System.out.println();
         } else {
             System.out.println("Không tìm thấy thông tin tài khoản");
+            System.out.println();
         }
     }
 }

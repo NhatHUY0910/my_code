@@ -19,7 +19,7 @@ public class ShoppingCart {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
-        this.totalPrice = this.productQuantity * this.productQuantity ;
+        this.totalPrice = this.productPrice * this.productQuantity ;
         this.productManufacturer = productManufacturer;
         this.productCountry = productCountry;
         this.customerName = customerName;
