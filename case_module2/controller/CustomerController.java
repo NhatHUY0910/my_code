@@ -1,21 +1,32 @@
 package case_module2.controller;
 
-import case_module2.model.shopping_cart.ShoppingCart;
 import case_module2.service.AccountService;
 import case_module2.service.CustomerService;
 import case_module2.service.ProductService;
 import case_module2.service.ShoppingCartService;
-import case_module2.view.CustomerMenu;
+
+import case_module2.view.CustomerMenuStrategy;
 import case_module2.view.PrintNewPage;
 
 import java.util.Scanner;
 
 public class CustomerController {
-    public static void controller() throws InterruptedException {
+    private final ProductService productService;
+    private final CustomerService customerService;
+    private final AccountService accountService;
+    private final ShoppingCartService shoppingCartService;
+    private final CustomerMenuStrategy customerMenuStrategy;
+
+    public CustomerController() {
+        this.productService = new ProductService();
+        this.customerService = new CustomerService();
+        this.accountService = new AccountService();
+        this.shoppingCartService = new ShoppingCartService();
+        this.customerMenuStrategy = new CustomerMenuStrategy(this);
+    }
+
+    public void controller() throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
-        ProductService productService = new ProductService();
-        CustomerService customerService = new CustomerService();
-        AccountService accountService = new AccountService();
         boolean isExcept = false;
 
         do {
@@ -29,12 +40,12 @@ public class CustomerController {
                     scanner.nextLine();
 
                     customerService.addMoney(inputMoney);
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
 
                 case 2:
                     productService.showAllProduct();
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
 
                 case 3:
@@ -43,28 +54,28 @@ public class CustomerController {
                     String productName = scanner.nextLine();
 
                     productService.searchProductByName(productName);
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
 
                 case 4:
                     ShoppingCartService.addToCart();
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
                 case 5:
                     ShoppingCartService.removeFromCart();
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
                 case 6:
                     ShoppingCartService.viewMyCart();
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
                 case 7:
                     customerService.buyProduct();
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
                 case 8:
                     customerService.showWallet();
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
                     break;
                 case 9:
                     System.out.println("Nhập tên đăng nhập:");
@@ -82,5 +93,9 @@ public class CustomerController {
                     System.out.println("Lựa chọn không hợp lệ! Vui lòng chọn lại");
             }
         } while (!isExcept);
+    }
+
+    public void showMenu() throws InterruptedException {
+        customerMenuStrategy.showMenu();
     }
 }

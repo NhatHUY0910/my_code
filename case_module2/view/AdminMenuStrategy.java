@@ -2,8 +2,10 @@ package case_module2.view;
 
 import case_module2.controller.AdminController;
 
-public class AdminMenu {
-    public static void showMenu() throws InterruptedException {
+import java.awt.*;
+
+public class AdminMenuStrategy implements MenuStrategy{
+    public void showMenu() throws InterruptedException {
         System.out.println("----------------Menu----------------");
         System.out.println("Chọn chức năng bạn muốn: ");
         System.out.println("1. Tạo mới một sản phẩm");
@@ -14,6 +16,13 @@ public class AdminMenu {
         System.out.println("6. Hiển thị lịch sử giao dịch");
         System.out.println("7. Hiển thị doanh thu bán hàng");
         System.out.println("0. Thoát");
-        AdminController.controller();
+
+        AdminController adminController = new AdminController();
+        adminController.controller();
+    }
+
+    @Override
+    public void execute() throws InterruptedException {
+        showMenu();
     }
 }
