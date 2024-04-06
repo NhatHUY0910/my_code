@@ -3,8 +3,8 @@ package case_module2.controller;
 import case_module2.read_write_file.AccountDTO;
 import case_module2.model.user_account.AdminAccount;
 import case_module2.model.user_account.CustomerAccount;
-import case_module2.view.AdminMenu;
-import case_module2.view.CustomerMenu;
+import case_module2.view.AdminMenuStrategy;
+import case_module2.view.CustomerMenuStrategy;
 
 import java.util.List;
 import java.util.Scanner;
@@ -25,6 +25,8 @@ public class LoginController {
     public void login() throws InterruptedException {
         boolean isSucceeded = false;
         boolean isLoggedIn = false;
+        AdminMenuStrategy adminMenuStrategy = new AdminMenuStrategy();
+        CustomerMenuStrategy customerMenuStrategy = new CustomerMenuStrategy(new CustomerController());
 
         while (!isLoggedIn) {
             System.out.println("-----------Đăng Nhập-----------");
@@ -42,7 +44,7 @@ public class LoginController {
                     System.out.println();
 
                     AccountDTO.writeCustomerAccounts(customerAccountList);
-                    CustomerMenu.showMenu();
+                    customerMenuStrategy.showMenu();
 //                    isLoggedIn = true;
                     break;
                 }
@@ -53,7 +55,7 @@ public class LoginController {
                 System.out.println("Đăng nhập thành công!");
 
                 Thread.sleep(1000);
-                AdminMenu.showMenu();
+                adminMenuStrategy.showMenu();
 //                isLoggedIn = true;
                 break;
             }
