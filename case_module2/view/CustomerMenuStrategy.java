@@ -2,8 +2,14 @@ package case_module2.view;
 
 import case_module2.controller.CustomerController;
 
-public class CustomerMenu {
-    public static void showMenu() throws InterruptedException {
+public class CustomerMenuStrategy implements MenuStrategy {
+    private final CustomerController customerController;
+
+    public CustomerMenuStrategy(CustomerController customerController) {
+        this.customerController = customerController;
+    }
+
+    public void showMenu() throws InterruptedException {
         System.out.println("----------------Menu----------------");
         System.out.println("Chọn chức năng bạn muốn: ");
         System.out.println("1. Nạp tiền vào ví");
@@ -16,6 +22,11 @@ public class CustomerMenu {
         System.out.println("8. Hiển thị số dư trong ví");
         System.out.println("9. Đổi mật khẩu");
         System.out.println("0. Thoát");
-        CustomerController.controller();
+        customerController.controller();
+    }
+
+    @Override
+    public void execute() throws InterruptedException {
+        showMenu();
     }
 }

@@ -45,6 +45,7 @@ public class AdminService {
             System.out.println("Nhập số lượng sản phẩm:");
             try {
                 quantity = scanner.nextInt();
+                scanner.nextLine();
                 validQuantity = true;
             } catch (InputMismatchException e) {
                 System.out.println("Dữ liệu không hợp lệ! Vui lòng nhập lại");
@@ -66,6 +67,7 @@ public class AdminService {
         ProductDTO.writeFile(productList);
 
         System.out.println("Đã tạo sản phẩm mới thành công!");
+        System.out.println();
     }
 
     public void editProduct() {
@@ -114,6 +116,7 @@ public class AdminService {
                             product.setPrice(newPrice);
                             ProductDTO.writeFile(productList);
                             System.out.println("Đã cập nhật giá mới cho sản phẩm");
+                            System.out.println();
                             break;
                         case 3:
                             System.out.println("Nhập số lượng mới của sản phẩm:");
@@ -131,6 +134,7 @@ public class AdminService {
                             product.setQuantity(newQuantity);
                             ProductDTO.writeFile(productList);
                             System.out.println("Đã cập nhật số lượng mới cho sản phẩm");
+                            System.out.println();
                             break;
                         case 4:
                             System.out.println("Nhập hãng sản xuất mới của sản phẩm:");
@@ -138,6 +142,7 @@ public class AdminService {
                             product.setManufacturer(newManufacturer);
                             ProductDTO.writeFile(productList);
                             System.out.println("Sản phẩm đã được thay đổi hãng sản xuất");
+                            System.out.println();
                             break;
                         case 5:
                             System.out.println("Nhập quốc gia xuất xứ mới của sản phẩm:");
@@ -145,6 +150,7 @@ public class AdminService {
                             product.setCountry(newCountry);
                             ProductDTO.writeFile(productList);
                             System.out.println("Quốc gia xuất xứ của sản phẩm đã được thay đổi");
+                            System.out.println();
                             break;
 
                         case 6:
@@ -153,6 +159,7 @@ public class AdminService {
                             product.setOtherElement(newFeature);
                             ProductDTO.writeFile(productList);
                             System.out.println("Đặc điểm của sản phẩm đã được thay đổi");
+                            System.out.println();
                             break;
 
                         default:
@@ -187,8 +194,10 @@ public class AdminService {
         if (found) {
             ProductDTO.writeFile(productList);
             System.out.println("Sản phẩm đã được xóa thành công");
+            System.out.println();
         } else {
             System.out.println("Không tìm thấy sản phẩm có tên: " + productName);
+            System.out.println();
         }
     }
 
