@@ -1,13 +1,13 @@
 package case_module2.controller;
 
-import case_module2.model.product.Product;
+import case_module2.model.shopping_cart.ShoppingCart;
 import case_module2.service.AccountService;
 import case_module2.service.CustomerService;
 import case_module2.service.ProductService;
 import case_module2.service.ShoppingCartService;
-import case_module2.view_display.CustomerMenu;
+import case_module2.view.CustomerMenu;
+import case_module2.view.PrintNewPage;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class CustomerController {
@@ -75,7 +75,7 @@ public class CustomerController {
                     System.out.println("-------Hẹn Tương Lai Gặp Lại-------");
                     Thread.sleep(1000);
                     LoginController.currentAccount = null;
-                    //newfage
+                    PrintNewPage.newPage();
                     HomePageController.load();
                     break;
                 default:

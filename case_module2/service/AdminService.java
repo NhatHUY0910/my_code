@@ -1,13 +1,11 @@
 package case_module2.service;
 
-import case_module2.dto.HistoryDTO;
-import case_module2.dto.ProductDTO;
+import case_module2.read_write_file.HistoryDTO;
+import case_module2.read_write_file.ProductDTO;
 import case_module2.model.bill.Bill;
 import case_module2.model.product.Product;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,15 +25,39 @@ public class AdminService {
         System.out.println("=====Tạo Sản Phẩm Mới=====");
         System.out.println("Nhập tên sản phẩm:");
         String name = scanner.nextLine();
-        System.out.println("Nhập giá sản phẩm:");
-        double price = scanner.nextDouble();
-        System.out.println("Nhập số lượng sản phẩm:");
-        int quantity = scanner.nextInt();
-        scanner.nextLine();
+
+        double price = 0;
+        boolean validPrice = false;
+        while (!validPrice) {
+            System.out.println("Nhập giá sản phẩm:");
+            try {
+                price = scanner.nextDouble();
+                validPrice = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Dữ liệu không hợp lệ! Vui lòng nhập lại");
+                scanner.nextLine();
+            }
+        }
+
+        int quantity = 0;
+        boolean validQuantity = false;
+        while (!validQuantity) {
+            System.out.println("Nhập số lượng sản phẩm:");
+            try {
+                quantity = scanner.nextInt();
+                validQuantity = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Dữ liệu không hợp lệ! Vui lòng nhập lại");
+                scanner.nextLine();
+            }
+        }
+
         System.out.println("Nhập hãng sản xuất:");
         String manufacturer = scanner.nextLine();
+
         System.out.println("Nhập quốc gia sản xuất:");
         String country = scanner.nextLine();
+
         System.out.println("Nhập đặc điểm sản phẩm:");
         String otherElement = scanner.nextLine();
 
@@ -63,6 +85,7 @@ public class AdminService {
                 System.out.println("3. Số lượng sản phầm");
                 System.out.println("4. Hãng sản xuất");
                 System.out.println("5. Xuất xứ");
+                System.out.println("6. Đặc điểm");
                 String choiceString = scanner.nextLine();
 
                 try {
@@ -77,14 +100,34 @@ public class AdminService {
                             break;
                         case 2:
                             System.out.println("Nhập đơn giá mới cho sản phẩm:");
-                            double newPrice = scanner.nextDouble();
+                            double newPrice = 0;
+                            boolean validPrice = false;
+                            while (!validPrice) {
+                                try {
+                                    newPrice = scanner.nextDouble();
+                                    validPrice = true;
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Dữ liệu không hợp lệ! Vui lòng nhập lại");
+                                    scanner.nextLine();
+                                }
+                            }
                             product.setPrice(newPrice);
                             ProductDTO.writeFile(productList);
                             System.out.println("Đã cập nhật giá mới cho sản phẩm");
                             break;
                         case 3:
                             System.out.println("Nhập số lượng mới của sản phẩm:");
-                            int newQuantity = scanner.nextInt();
+                            int newQuantity = 0;
+                            boolean validQuantity = false;
+                            while (!validQuantity) {
+                                try {
+                                    newQuantity = scanner.nextInt();
+                                    validQuantity = true;
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Dữ liệu không hợp lệ! Vui lòng nhập lại");
+                                    scanner.nextLine();
+                                }
+                            }
                             product.setQuantity(newQuantity);
                             ProductDTO.writeFile(productList);
                             System.out.println("Đã cập nhật số lượng mới cho sản phẩm");
@@ -103,6 +146,15 @@ public class AdminService {
                             ProductDTO.writeFile(productList);
                             System.out.println("Quốc gia xuất xứ của sản phẩm đã được thay đổi");
                             break;
+
+                        case 6:
+                            System.out.println("Nhập đặc điểm mới của sản phẩm:");
+                            String newFeature = scanner.nextLine();
+                            product.setOtherElement(newFeature);
+                            ProductDTO.writeFile(productList);
+                            System.out.println("Đặc điểm của sản phẩm đã được thay đổi");
+                            break;
+
                         default:
                             System.out.println("Lựa chọn không hợp lệ! Hãy chọn lại");
                             break;

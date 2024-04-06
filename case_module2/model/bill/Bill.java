@@ -29,6 +29,9 @@ public class Bill {
         this.totalCost = totalCost;
     }
 
+    public Bill() {
+    }
+
     public LocalDateTime getTimeTransaction() {
         return timeTransaction;
     }
@@ -77,7 +80,13 @@ public class Bill {
         this.totalCost = totalCost;
     }
 
-    public double calculateTotalCost() {
-        return productPrice * productQuantity;
+    public double calculateTotalCost(List<ShoppingCart> shoppingCarts) {
+        double totalCost = 0.0;
+
+        for (ShoppingCart shoppingCart : shoppingCarts) {
+            double itemTotal = shoppingCart.getProductPrice() * shoppingCart.getProductQuantity();
+            totalCost += itemTotal;
+        }
+        return totalCost;
     }
 }

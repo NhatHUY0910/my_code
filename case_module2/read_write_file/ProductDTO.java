@@ -1,4 +1,4 @@
-package case_module2.dto;
+package case_module2.read_write_file;
 
 import case_module2.model.product.*;
 

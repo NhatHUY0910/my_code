@@ -1,19 +1,27 @@
 package case_module2.service;
 
-import case_module2.dto.HistoryDTO;
+import case_module2.read_write_file.HistoryDTO;
 import case_module2.model.bill.Bill;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class HistoryService {
-    private static List<Bill> historyList = HistoryDTO.readFile();
+    private static HistoryService instance;
+    private static List<Bill> historyList;
 
     public HistoryService() {
-        this.historyList = HistoryDTO.readFile();
+        historyList = HistoryDTO.readFile();
     }
 
-    public static void showAllHistory() {
+    public static HistoryService getInstance() {
+        if (instance == null) {
+            instance = new HistoryService();
+        }
+        return instance;
+    }
+
+    public void showAllHistory() {
         for (Bill bill : historyList) {
             System.out.println("Thời gian giao dịch: " + bill.getTimeTransaction());
             System.out.println("Tên sản phẩm: " + bill.getProductName());

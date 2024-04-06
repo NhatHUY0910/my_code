@@ -1,4 +1,4 @@
-package case_module2.dto;
+package case_module2.read_write_file;
 
 import case_module2.model.enum_user.GenderCustomer;
 import case_module2.model.user_account.AdminAccount;
@@ -76,20 +76,6 @@ public class AccountDTO {
                 }
             } catch (IOException e) {
                 System.err.println("Có lỗi khi ghi file của tài khoản khách hàng: " + e.getMessage());
-            }
-        }
-
-    public static void main(String[] args) {
-        String adminUserName = "Admin";
-        String password = "MyPassword";
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("D:\\CodeGym\\Module_2\\luyen_tap_code_java\\case_module2\\admin_account.csv"))) {
-            String line = adminUserName + "," + password;
-            writer.write(line);
-            writer.newLine();
-            System.out.println("Tạo tệp tin CSV thành công");
-        } catch (IOException e) {
-            System.err.println("Có lỗi khi tạo tệp tin CSV: " + e.getMessage());
         }
     }
 }

@@ -1,6 +1,6 @@
 package case_module2.service;
 
-import case_module2.dto.ProductDTO;
+import case_module2.read_write_file.ProductDTO;
 import case_module2.model.product.Product;
 import case_module2.model.shopping_cart.ShoppingCart;
 
@@ -20,6 +20,7 @@ public class ProductService {
         this.productDTO = productDTO;
     }
 
+
     public List<Product> searchProductByName(String productName) {
         List<Product> productList = ProductDTO.readFile();
         List<Product> matchingProducts = new ArrayList<>();
@@ -35,10 +36,14 @@ public class ProductService {
         } else {
             System.out.println("Kết quả tìm kiếm:");
             for (Product product : matchingProducts) {
-                System.out.println("Tên Sản phẩm: " + product.getName());
+                System.out.println("Tên Sản Phẩm: " + product.getName());
                 System.out.println("Giá: " + product.getPrice());
-                System.out.println("Số lượng: " + product.getQuantity());
-                System.out.println("------------------------");
+                System.out.println("Số Lượng: " + product.getQuantity());
+                System.out.println("Hãng Sản Xuất: " + product.getManufacturer());
+                System.out.println("Sản Xuất Tại: " + product.getCountry());
+                System.out.println("Đặc Điểm: " + product.getOtherElement());
+                System.out.println("-------------------------------");
+                System.out.println();
             }
         }
         return matchingProducts;
@@ -75,8 +80,10 @@ public class ProductService {
 
         if (productList.isEmpty()) {
             System.out.println("Danh sách sản phẩm trống");
+            System.out.println();
         } else {
             System.out.println("Danh sách sản phẩm:");
+            System.out.println("---------------------------------------");
             for (Product product : productList) {
                 System.out.println("Tên sản phẩm: " + product.getName());
                 System.out.println("Giá: " + product.getPrice());
@@ -84,7 +91,8 @@ public class ProductService {
                 System.out.println("Hãng sản xuất: " + product.getManufacturer());
                 System.out.println("Quốc gia: " + product.getCountry());
                 System.out.println("Đặc Điểm: " + product.getOtherElement());
-                System.out.println("------------------------------");
+                System.out.println("---------------------------------------");
+                System.out.println();
             }
         }
         return productList;

@@ -1,7 +1,7 @@
 package case_module2.service;
 
 import case_module2.controller.HomePageController;
-import case_module2.dto.AccountDTO;
+import case_module2.read_write_file.AccountDTO;
 import case_module2.model.enum_user.GenderCustomer;
 import case_module2.model.user_account.Account;
 import case_module2.model.user_account.CustomerAccount;
@@ -81,6 +81,12 @@ public class AccountService {
             System.out.println("Nhập tuổi:");
             try {
                 age = Integer.parseInt(scanner.nextLine());
+                if (age < 3 || age > 200) {
+                    System.out.println("Tuổi không hợp lệ! Vui lòng nhập độ tuổi hợp lí");
+                    System.out.println();
+                } else {
+                    validAge = true;
+                }
                 validAge = true;
             } catch (NumberFormatException e) {
                 System.out.println("Tuổi không hợp lệ! Vui lòng nhập số nguyên");
@@ -103,7 +109,7 @@ public class AccountService {
                 genderCustomer = GenderCustomer.FEMALE;
                 validGender = true;
             } else {
-                System.out.println("Giới tính không hợp lệ. Vui lòng chọn Nam hoặc Nữ");
+                System.out.println("Giới tính không hợp lệ! Vui lòng chọn Nam hoặc Nữ");
                 System.out.println();
             }
         } while (!validGender);
@@ -121,8 +127,19 @@ public class AccountService {
             }
         } while (!validPhoneNumber);
 
-        System.out.println("Nhập quốc gia:");
-        String country = scanner.nextLine();
+        String country;
+        boolean validCountry = false;
+        do {
+            System.out.println("Nhập quốc gia:");
+            country = scanner.nextLine();
+
+            if (country.matches(".*\\d.*")) {
+                System.out.println("Tên quốc gia không hợp lệ! Vui lòng chỉ nhập chữ");
+                System.out.println();
+            } else {
+                validCountry = true;
+            }
+        } while (!validCountry);
 
         CustomerAccount customerAccount = new CustomerAccount(userName, password, fullName, age, genderCustomer, phoneNumber, country);
 
@@ -187,7 +204,7 @@ public class AccountService {
         customerAccount.setPassWord(newPassword);
         AccountDTO.writeCustomerAccounts(customerAccountList);
         System.out.println("Đã thay đổi mật khẩu mới thành công");
-
+        System.out.println();
         HomePageController.load();
         }
     }

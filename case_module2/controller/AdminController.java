@@ -3,7 +3,8 @@ package case_module2.controller;
 import case_module2.service.AdminService;
 import case_module2.service.HistoryService;
 import case_module2.service.ProductService;
-import case_module2.view_display.AdminMenu;
+import case_module2.view.AdminMenu;
+import case_module2.view.PrintNewPage;
 
 import java.util.Scanner;
 
@@ -12,6 +13,8 @@ public class AdminController {
             Scanner scanner = new Scanner(System.in);
             ProductService productService = new ProductService();
             AdminService adminService = new AdminService();
+            HistoryService historyService = HistoryService.getInstance();
+
             System.out.println("Lựa chọn chức năng:");
             int choice = scanner.nextInt();
             switch (choice) {
@@ -40,16 +43,17 @@ public class AdminController {
                     AdminMenu.showMenu();
                     break;
                 case 6:
-                    HistoryService.showAllHistory();
+                    historyService.showAllHistory();
                     AdminMenu.showMenu();
                     break;
                 case 7:
-                    adminService.showTurnover();
+                    historyService.showTurnover();
                     AdminMenu.showMenu();
                     break;
                 case 0:
                     System.out.println("------Chào Ngài Chủ Tịch------");
                     Thread.sleep(1000);
+                    PrintNewPage.newPage();
                     HomePageController.load();
                     break;
                 default:
